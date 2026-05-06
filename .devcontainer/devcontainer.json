@@ -1,0 +1,5 @@
+{
+  "name": "HPC Linux Conda Training",
+  "image": "mcr.microsoft.com/devcontainers/miniconda:latest",
+  "postCreateCommand": "conda create -n hpc_course -c conda-forge -c bioconda seqkit fastqc samtools -y"
+}

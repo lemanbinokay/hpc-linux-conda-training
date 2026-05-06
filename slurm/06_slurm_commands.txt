@@ -1,0 +1,20 @@
+# Submit job
+sbatch slurm/05_slurm_seqkit_job.sh
+
+# Check your jobs
+squeue -u $USER
+
+# Check all jobs
+squeue
+
+# Cancel job
+scancel JOB_ID
+
+# See output
+cat results/slurm_*.out
+
+# See errors
+cat results/slurm_*.err
+
+# See final result
+cat results/slurm_demo/seqkit_stats_from_slurm.txt
