@@ -1,4 +1,4 @@
-# HPC Linux Conda Training
+# OMICS Course - HPC Linux Conda Training
 
 Bu repository, biyoinformatik analizlerde kullanılan **HPC (High Performance Computing)** sistemlerinin temel kullanımını öğretmek amacıyla hazırlanmıştır. Amaç, katılımcıların teoriyi okumaktan ziyade **komutları çalıştırarak öğrenmesini sağlamaktır**.
 
