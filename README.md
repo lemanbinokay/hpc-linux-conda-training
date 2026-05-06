@@ -10,19 +10,44 @@ Linux → Dosya yönetimi → Conda → Tool kurulumu → Script → HPC → SLU
 
 ---
 
-## Kurulum (Zorunlu)
 
-Bu repo'yu çalıştırmadan önce conda environment oluşturulmalıdır:
+Bu repository’yi çalıştırmadan önce gerekli conda environment oluşturulmalıdır.
+
+Codespaces ve bazı HPC ortamlarında conda otomatik aktif gelmez. Bu nedenle önce conda’yı shell’e bağlayın:
+
+source /opt/conda/etc/profile.d/conda.sh
+
+Ardından environment oluşturun ve aktive edin:
 
 conda create -n hpc_course -y  
 conda activate hpc_course  
+
+Gerekli biyoinformatik araçları kurun:
+
 conda install -c conda-forge -c bioconda seqkit fastqc samtools -y  
 
-ÖNEMLİ:  
-- `bioconda` tek başına yeterli değildir  
-- `conda-forge` mutlaka eklenmelidir  
-- Aksi halde dependency hataları alınır  
+---
 
+### Kurulum Kontrolü
+
+which seqkit  
+which fastqc  
+which samtools  
+
+Çıktı şu formatta olmalıdır:
+
+/opt/conda/envs/hpc_course/...
+
+---
+
+### ÖNEMLİ
+
+- `bioconda` tek başına yeterli değildir, `conda-forge` ile birlikte kullanılmalıdır  
+- Conda environment aktif değilse tool’lar çalışmaz  
+- Script içinde conda environment tekrar aktive edilmelidir:
+
+source /opt/conda/etc/profile.d/conda.sh  
+conda activate hpc_course  
 ---
 
 ## Eğitimi Çalıştırma
