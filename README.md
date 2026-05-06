@@ -1,166 +1,169 @@
 # HPC Linux Conda Training
 
-Bu repository, biyoinformatik analizlerde kullanılan HPC (High Performance Computing) sistemlerinin temel kullanımını öğretmek amacıyla hazırlanmıştır.
+Bu repository, biyoinformatik analizlerde kullanılan **HPC (High Performance Computing)** sistemlerinin temel kullanımını öğretmek amacıyla hazırlanmıştır. Amaç, katılımcıların teoriyi okumaktan ziyade **komutları çalıştırarak öğrenmesini sağlamaktır**.
 
 ---
 
-## Genel Akış
+## Eğitim Akışı
 
-Bu eğitimde aşağıdaki mantık adım adım öğretilir:
-
-Linux → Dosya yönetimi → Conda → Tool kurulumu → Script yazımı → HPC → SLURM
+Linux → Dosya yönetimi → Conda → Tool kurulumu → Script → HPC → SLURM
 
 ---
 
-## Linux Temelleri
+## Kurulum (Zorunlu)
 
-Linux, HPC sistemlerinin temelidir. Tüm işlemler terminal üzerinden yapılır.
+Bu repo'yu çalıştırmadan önce conda environment oluşturulmalıdır:
 
-### Dizin (klasör) komutları
+conda create -n hpc_course -y  
+conda activate hpc_course  
+conda install -c conda-forge -c bioconda seqkit fastqc samtools -y  
 
-pwd  
-→ bulunduğun dizini gösterir
-
-ls  
-→ bulunduğun klasördeki dosyaları listeler
-
-ls -lh  
-→ dosya boyutlarıyla birlikte listeler
-
-cd klasor_adi  
-→ klasöre girer
-
-cd ..  
-→ bir üst klasöre çıkar
-
-cd ~  
-→ home dizinine gider
+ÖNEMLİ:  
+- `bioconda` tek başına yeterli değildir  
+- `conda-forge` mutlaka eklenmelidir  
+- Aksi halde dependency hataları alınır  
 
 ---
 
-### Dosya işlemleri
+## Eğitimi Çalıştırma
 
-mkdir klasor_adi  
-→ yeni klasör oluşturur
+Tüm eğitim tek komutla çalıştırılabilir:
 
-mkdir -p a/b/c  
-→ iç içe klasör oluşturur
+bash scripts/run_all_local.sh  
 
-touch dosya.txt  
-→ boş dosya oluşturur
+Bu script aşağıdaki adımları sırasıyla çalıştırır:
 
-cp dosya1.txt dosya2.txt  
-→ dosya kopyalar
-
-mv dosya.txt yeni_isim.txt  
-→ dosya taşır veya yeniden adlandırır
-
-rm dosya.txt  
-→ dosya siler
-
-rm -r klasor  
-→ klasörü siler
+1. Linux temel komutları  
+2. Conda environment kontrolü  
+3. Tool çalıştırma (seqkit)  
+4. Loop ile çoklu dosya işleme  
 
 ---
 
-### Dosya içeriği
+## Repository Yapısı
 
-cat dosya.txt  
-→ dosyanın tamamını gösterir
-
-head dosya.txt  
-→ ilk satırları gösterir
-
-tail dosya.txt  
-→ son satırları gösterir
-
-wc -l dosya.txt  
-→ satır sayısını verir
+.  
+├── data/        → örnek veri (FASTA)  
+├── scripts/     → eğitim scriptleri  
+├── results/     → analiz çıktıları  
+└── slurm/       → HPC job scriptleri  
 
 ---
 
-### Komut zincirleme
+# Linux Nedir?
 
-|  
-→ bir komutun çıktısını diğerine verir
+Linux, HPC sistemlerinin temel işletim sistemidir.  
+Tüm işlemler terminal üzerinden yapılır.
 
-örnek:  
+---
+
+## Temel Linux Komutları
+
+pwd → bulunduğun dizini gösterir  
+ls → dosyaları listeler  
+ls -lh → boyutlarıyla listeler  
+
+cd klasor → klasöre gir  
+cd .. → bir üst klasör  
+cd ~ → home dizini  
+
+---
+
+## Dosya İşlemleri
+
+mkdir klasor → klasör oluştur  
+mkdir -p a/b/c → iç içe klasör  
+
+touch dosya.txt → boş dosya oluştur  
+
+cp a.txt b.txt → kopyala  
+mv a.txt yeni.txt → taşı/yeniden adlandır  
+
+rm dosya.txt → dosya sil  
+rm -r klasor → klasör sil  
+
+---
+
+## Dosya İçeriği
+
+cat dosya.txt → tamamını göster  
+head dosya.txt → ilk satırlar  
+tail dosya.txt → son satırlar  
+wc -l dosya.txt → satır sayısı  
+
+---
+
+## Komut Zinciri (Pipe)
+
 cat dosya.txt | wc -l  
 
----
-
-## Conda Nedir?
-
-Conda, yazılım ortamlarını yönetmek için kullanılan bir sistemdir.
-
-Farklı projelerde farklı tool ve versiyonları izole şekilde kullanmak.
+Bir komutun çıktısını diğerine verir.
 
 ---
 
-### Conda ortamları
+# Conda Nedir?
 
-conda env list  
-→ mevcut ortamları listeler
+Conda, farklı yazılım ortamlarını izole şekilde yönetmeyi sağlar.
 
-conda create -n env_adi  
-→ yeni ortam oluşturur
+### Neden Conda?
 
-conda activate env_adi  
-→ ortamı aktif eder
-
-conda deactivate  
-→ ortamdan çıkar
+- Her proje için ayrı environment  
+- Versiyon çakışması olmaz  
+- Reproducibility sağlar  
 
 ---
 
-### Paket kurulumu
+## Conda Komutları
 
-conda install paket_adi  
+conda env list → ortamları listele  
+conda create -n env → yeni ortam  
+conda activate env → aktif et  
+conda deactivate → çık  
 
-biyoinformatik tool için:
+---
+
+## Paket Kurulumu
+
+conda install paket  
+
+Biyoinformatik için:
 
 conda install -c bioconda seqkit  
 
 ---
 
-### Neden Conda?
-
-- her proje için ayrı ortam  
-- versiyon çakışması olmaz  
-- reproducibility sağlar  
-
----
-
-## Tool Kullanımı
+# Tool Kullanımı
 
 Örnek tool: seqkit
 
 seqkit stats data/example.fasta  
 
-Bu komut FASTA dosyası hakkında özet bilgi verir.
+Bu komut:
+- kaç sequence var  
+- toplam uzunluk  
+- ortalama uzunluk  
+gibi bilgileri verir.
 
 ---
 
-## Bash Script Nedir?
+# Bash Script Nedir?
 
-Tek tek komut yazmak yerine, bir dosya içine yazıp otomatik çalıştırmayı sağlar.
+Tek tek komut yazmak yerine otomatik çalıştırma sağlar.
 
-örnek:
+Örnek:
 
 #!/bin/bash  
 echo "Hello"  
 
-çalıştırmak için:
+Çalıştırma:
 
 bash script.sh  
 
 ---
 
-## Loop (Döngü)
+# Loop (Döngü)
 
-Birden fazla dosyada aynı işlemi yapmak için kullanılır.
-
-örnek:
+Aynı işlemi birden fazla dosyada çalıştırmak için:
 
 for file in data/*.fasta  
 do  
@@ -169,88 +172,67 @@ done
 
 ---
 
-## HPC Nedir?
+# HPC Nedir?
 
 HPC (High Performance Computing), büyük hesaplamaların güçlü bilgisayar kümelerinde yapılmasını sağlar.
 
-HPC’de iki önemli kavram vardır:
+---
 
-Login node  
-→ kullanıcı giriş yaptığı yer  
-→ küçük işler yapılır  
+## HPC Mimarisi
 
-Compute node  
-→ asıl hesaplama burada yapılır  
-→ job gönderilir  
+Login node:
+- sisteme giriş yapılır  
+- küçük işler yapılır  
+
+Compute node:
+- gerçek hesaplama yapılır  
+- job burada çalışır  
 
 ---
 
-## SLURM Nedir?
+# SLURM Nedir?
 
-SLURM, HPC sistemlerinde job yönetimi yapan bir scheduler’dır.
+SLURM, HPC sistemlerinde job yönetimi yapan scheduler’dır.
 
-Kullanıcı doğrudan hesaplama yapmaz; işi SLURM’a verir.
-
----
-
-## SLURM Job Mantığı
-
-Normal çalıştırma:
-
-bash script.sh  
-→ login node’da çalışır
-
-HPC çalıştırma:
-
-sbatch script.sh  
-→ job scheduler’a gönderilir  
-→ compute node’da çalışır  
+Kullanıcı doğrudan compute node’da çalışmaz → job gönderir.
 
 ---
 
-## SLURM Script Yapısı
+## Çalıştırma Farkı
+
+bash script.sh → lokal çalıştırma  
+sbatch script.sh → HPC çalıştırma  
+
+---
+
+## SLURM Script
 
 #!/bin/bash  
-#SBATCH --job-name=job_adi  
-#SBATCH --output=output.txt  
-#SBATCH --error=error.txt  
+#SBATCH --job-name=test  
+#SBATCH --output=results/slurm_%j.out  
+#SBATCH --error=results/slurm_%j.err  
 #SBATCH --time=00:05:00  
 #SBATCH --cpus-per-task=1  
 #SBATCH --mem=1G  
 
-Bu satırlar job’un kaynaklarını belirler.
+Bu parametreler:
+- CPU  
+- RAM  
+- süre  
+gibi kaynakları belirler.
 
 ---
 
 ## SLURM Komutları
 
-sbatch script.sh  
-→ job gönderir
-
-squeue  
-→ çalışan jobları gösterir
-
-squeue -u $USER  
-→ kendi joblarını gösterir
-
-scancel JOB_ID  
-→ job iptal eder
+sbatch script.sh → job gönder  
+squeue → jobları listele  
+squeue -u $USER → kendi jobların  
+scancel JOB_ID → job iptal  
 
 ---
 
 ## Çıktı Dosyaları
 
-SLURM çalıştırınca şu dosyalar oluşur:
-
 results/slurm_JOBID.out  
 results/slurm_JOBID.err  
-
----
-
-## Önemli Fark
-
-bash script.sh  
-→ lokal çalıştırma  
-
-sbatch script.sh  
-→ HPC çalıştırma  
